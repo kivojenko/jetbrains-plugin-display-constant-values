@@ -3,7 +3,7 @@
     <name>Display Constant Values</name>
     <vendor email="kivojenko@gmail.com">Ksenija Kivojenko</vendor>
     <description>This plugin folds enum and constant names to their values for better readability.</description>
-
+    <idea-version since-build="222" until-build="243.*"/>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.python</depends>
 

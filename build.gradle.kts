@@ -12,7 +12,7 @@ repositories {
 
 
 intellij {
-    version.set("2023.2")
+    version.set("2024.3")
     type.set("PY")
     plugins.set(listOf("python")) // Ensures PyCharm's Python support is loaded
 }
