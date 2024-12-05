@@ -1,16 +1,16 @@
 from enum import Enum
 
-from declare import IMPORTED_CONSTANT, ImportedConfig
+from declare import IMPORTED_CONSTANT, ImportedEnumConfig
 
 print(IMPORTED_CONSTANT)
-print(ImportedConfig.ENUM_CONSTANT)
+print(ImportedEnumConfig.ENUM_CONSTANT)
 
-CONSTANT = "Hello, World!"
+CONSTANT = "Constant value"
 print(CONSTANT)
 
 
-class Config(Enum):
-    ENUM_CONSTANT = "Test"
+class EnumConfig(Enum):
+    ENUM_CONSTANT = "Enum value"
 
 
-print(Config.ENUM_CONSTANT)
+print(EnumConfig.ENUM_CONSTANT)

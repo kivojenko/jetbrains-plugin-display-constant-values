@@ -1,7 +1,7 @@
 from enum import Enum
 
-IMPORTED_CONSTANT = 42
+IMPORTED_CONSTANT = "Imported constant value"
 
 
-class ImportedConfig(Enum):
-    ENUM_CONSTANT = "Test"
+class ImportedEnumConfig(Enum):
+    ENUM_CONSTANT = "Imported enum value"
