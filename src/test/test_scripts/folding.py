@@ -5,7 +5,7 @@ from declare import IMPORTED_CONSTANT, ImportedEnumConfig
 print(IMPORTED_CONSTANT)
 print(ImportedEnumConfig.ENUM_CONSTANT)
 
-CONSTANT = "42"
+CONSTANT = 42
 print(CONSTANT)
 
 

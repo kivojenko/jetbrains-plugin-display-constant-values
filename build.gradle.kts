@@ -1,23 +1,28 @@
 plugins {
     id("java")
-    id("org.jetbrains.intellij") version "1.17.4"
+    id("org.jetbrains.intellij.platform") version "2.2.0"
 }
 
 group = "com.kivojenko.plugin.display"
-version = "1.0-SNAPSHOT"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
+}
+
+dependencies {
+    intellijPlatform {
+        pycharmProfessional("2024.3")
+        bundledPlugin("Pythonid")
+    }
+    compileOnly("org.projectlombok:lombok:1.18.36")
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
 }
 
 
-intellij {
-    version.set("2024.3")
-    type.set("PY")
-    plugins.set(listOf("python")) // Ensures PyCharm's Python support is loaded
-}
-
-// Optional: Configure Java compatibility
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -25,7 +30,6 @@ java {
 
 
 tasks {
-    // Set the JVM compatibility versions
     withType<JavaCompile> {
         sourceCompatibility = "17"
         targetCompatibility = "17"
