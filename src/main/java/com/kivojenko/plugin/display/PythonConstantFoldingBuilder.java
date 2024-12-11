@@ -31,9 +31,4 @@ public class PythonConstantFoldingBuilder extends FoldingBuilderEx implements Du
     public boolean isCollapsedByDefault(@NotNull ASTNode node) {
         return true;
     }
-
-    @Override
-    public boolean isCollapsedByDefault(@NotNull FoldingDescriptor foldingDescriptor) {
-        return true;
-    }
 }

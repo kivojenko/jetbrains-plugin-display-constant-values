@@ -2,13 +2,30 @@
     <id>com.kivojenko.plugin.display</id>
     <name>Display Constant Values</name>
     <vendor email="kivojenko@gmail.com">Ksenija Kivojenko</vendor>
-    <description>This plugin folds enum and constant names to their values for better readability.</description>
-    <idea-version since-build="222"/>
+    <description>This plugin folds upper case constant names to their values for better readability.</description>
+    <change-notes>
+        <![CDATA[
+        <ul>
+            <li>Version 1.0.2: Fold on file reopen</li>
+            <li>Version 1.0.1: Add support for Idea 2024</li>
+            <li>Version 1.0.0: Initial release</li>
+        </ul>
+        ]]>
+    </change-notes>
+    <idea-version since-build="200"/>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.python</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.foldingBuilder language="Python"
                              implementationClass="com.kivojenko.plugin.display.PythonConstantFoldingBuilder"/>
+
     </extensions>
+
+    <applicationListeners>
+        <listener
+                class="com.kivojenko.plugin.display.PythonConstantFoldingFileEditorListener"
+                topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+    </applicationListeners>
+
 </idea-plugin>

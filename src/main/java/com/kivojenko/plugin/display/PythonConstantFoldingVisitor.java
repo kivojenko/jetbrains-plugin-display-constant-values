@@ -1,6 +1,7 @@
 package com.kivojenko.plugin.display;
 
 import com.intellij.lang.folding.FoldingDescriptor;
+import com.intellij.openapi.editor.FoldingGroup;
 import com.intellij.psi.PsiElement;
 import com.jetbrains.python.psi.*;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Getter
 public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
@@ -17,23 +19,28 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
     public void visitElement(@NotNull PsiElement element) {
         super.visitElement(element);
 
-        if (element instanceof PyReferenceExpression reference && !isPartOfImport(reference)) {
-            var resolved = reference.getReference().resolve();
-            if (resolved instanceof PyTargetExpression target) {
-                var parent = target.getParent();
-                if (parent instanceof PyAssignmentStatement assignment) {
-                    addFoldingDescriptor(reference, assignment);
-                }
-            }
+        if (!(element instanceof PyReferenceExpression reference) || isPartOfImport(reference)) {
+            return;
+        }
+
+        var resolved = reference.getReference().resolve();
+        if (!(resolved instanceof PyTargetExpression target) || !isUpperCase(target.getText())) {
+            return;
+        }
+
+        if (target.getParent() instanceof PyAssignmentStatement assignment) {
+            addFoldingDescriptor(reference, assignment);
         }
     }
 
-
     private boolean isPartOfImport(PyReferenceExpression reference) {
-        PsiElement parent = reference.getParent();
+        var parent = reference.getParent();
         return parent instanceof PyImportElement || parent instanceof PyFromImportStatement;
     }
 
+    private boolean isUpperCase(String text) {
+        return text != null && text.equals(text.toUpperCase());
+    }
 
     private void addFoldingDescriptor(PyReferenceExpression reference, PyAssignmentStatement assignment) {
         var valueElement = assignment.getAssignedValue();
@@ -47,7 +54,8 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
         var placeholder = value.getText();
         var range = reference.getTextRange();
         var node = reference.getNode();
-        return new FoldingDescriptor(node, range, null, placeholder);
+        var group = FoldingGroup.newGroup("Constant Folding " + placeholder);
+        return new FoldingDescriptor(node, range, group, placeholder);
     }
 
 }
