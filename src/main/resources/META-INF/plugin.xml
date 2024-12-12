@@ -8,10 +8,10 @@
     <change-notes>
         <![CDATA[
         <ul>
-            <li>Version 1.0.3: Fold all enumerated constants to their names</li>
-            <li>Version 1.0.2: Fold on file reopen</li>
-            <li>Version 1.0.1: Add support for Idea 2024</li>
-            <li>Version 1.0.0: Initial release</li>
+            <li>1.0.3: Fold all enumerated constants to their names</li>
+            <li>1.0.2: Fold on file reopen</li>
+            <li>1.0.1: Add support for Idea 2024</li>
+            <li>1.0.0: Initial release</li>
         </ul>
         ]]>
     </change-notes>
