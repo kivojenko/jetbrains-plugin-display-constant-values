@@ -2,24 +2,26 @@
     <id>com.kivojenko.plugin.display</id>
     <name>Display Constant Values</name>
     <vendor email="kivojenko@gmail.com">Ksenija Kivojenko</vendor>
-    <description>This plugin folds upper case constant names to their values for better readability.</description>
+    <description>
+        This plugin folds upper case constant names to their values for better readability in Python.
+    </description>
     <change-notes>
         <![CDATA[
         <ul>
+            <li>Version 1.0.3: Fold all enumerated constants to their names</li>
             <li>Version 1.0.2: Fold on file reopen</li>
             <li>Version 1.0.1: Add support for Idea 2024</li>
             <li>Version 1.0.0: Initial release</li>
         </ul>
         ]]>
     </change-notes>
-    <idea-version since-build="200"/>
+
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.python</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.foldingBuilder language="Python"
                              implementationClass="com.kivojenko.plugin.display.PythonConstantFoldingBuilder"/>
-
     </extensions>
 
     <applicationListeners>

@@ -34,7 +34,7 @@ public class PythonConstantFoldingFileEditorListener implements FileEditorManage
     }
 
     private void collapseFoldRegion(FoldRegion foldRegion) {
-        if (foldRegion.isExpanded() && foldRegion.getGroup() != null) {
+        if (foldRegion.isExpanded() && foldRegion.getGroup() != null && !foldRegion.getPlaceholderText().equals("...")) {
             foldRegion.setExpanded(false);
         }
     }

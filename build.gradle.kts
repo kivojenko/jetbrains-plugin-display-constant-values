@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.kivojenko.plugin.display"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -36,3 +36,11 @@ tasks {
     }
 }
 
+
+intellijPlatform {
+    pluginConfiguration {
+        ideaVersion {
+            sinceBuild = "231"
+        }
+    }
+}
