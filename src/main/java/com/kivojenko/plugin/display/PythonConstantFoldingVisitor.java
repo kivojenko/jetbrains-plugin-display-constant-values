@@ -31,8 +31,9 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
         }
 
 
-        if (isPartOfEnumeratedEnum(assignment) && isEnumeratedConst(assignment)) {
-            addFoldingDescriptor(reference, target.getText());
+        if (isPartOfEnum(assignment)) {
+            var text = shouldBeFoldedToName(assignment) ? target.getText() : assignment.getAssignedValue().getText();
+            addFoldingDescriptor(reference, text);
         } else if (isUpperCase(target.getText())) {
             addConstFoldingDescriptor(reference, assignment.getAssignedValue());
         }
@@ -44,13 +45,25 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
         return parent instanceof PyImportElement || parent instanceof PyFromImportStatement;
     }
 
-    private boolean isPartOfEnumeratedEnum(PyAssignmentStatement assignment) {
+    private boolean isPartOfEnum(PyAssignmentStatement assignment) {
         var parentClass = PsiTreeUtil.getParentOfType(assignment, PyClass.class);
-        if (parentClass == null) {
-            return false;
+        return parentClass != null && isEnumSubclass(parentClass);
+    }
+
+    private boolean isEnumSubclass(PyClass clazz) {
+        for (PyExpression expression : clazz.getSuperClassExpressions()) {
+            if (expression.getText().equals("Enum")) return true;
         }
 
-        return inheritsFromEnum(parentClass);
+        for (var parent : clazz.getSuperClasses(null)) {
+            if (isEnumSubclass(parent)) return true;
+        }
+
+        return false;
+    }
+
+    private boolean shouldBeFoldedToName(PyAssignmentStatement assignment) {
+        return isEnumeratedConst(assignment) || assignment.getAssignedValue() == null;
     }
 
     private boolean isEnumeratedConst(PyAssignmentStatement assignment) {
@@ -58,14 +71,6 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
 
         if (assignedValue instanceof PyNumericLiteralExpression numericLiteral) {
             return numericLiteral.getNode().getElementType() == PyElementTypes.INTEGER_LITERAL_EXPRESSION;
-        }
-        return false;
-    }
-
-
-    private boolean inheritsFromEnum(PyClass pyClass) {
-        for (PyExpression expression : pyClass.getSuperClassExpressions()) {
-            if (expression.getText().equals("Enum")) return true;
         }
         return false;
     }

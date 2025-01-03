@@ -1,4 +1,4 @@
-from enum import Enum
+from enum_structure import Enum
 
 IMPORTED_CONSTANT = "Imported constant value"
 

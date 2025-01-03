@@ -3,11 +3,19 @@
     <name>Display Constant Values</name>
     <vendor email="kivojenko@gmail.com">Ksenija Kivojenko</vendor>
     <description>
-        This plugin folds upper case constant names to their values for better readability in Python.
+        <![CDATA[
+        This plugin folds
+        <ul>
+            <li>enumerated constants to their names
+            <li>upper case constants to their values
+        </ul>
+        for better readability in Python.
+        ]]>
     </description>
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.0.4: Improve enums' support</li>
             <li>1.0.3: Fold all enumerated constants to their names</li>
             <li>1.0.2: Fold on file reopen</li>
             <li>1.0.1: Add support for Idea 2024</li>
