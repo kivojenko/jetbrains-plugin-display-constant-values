@@ -13,21 +13,20 @@ This plugin folds constants in the following ways:
 
 1. **Enumerated Constants**  
   ```python  
-     class Color(Enum):  
-         RED = 1  
-         GREEN = 2  
-         BLUE = 3  
+  class Color(Enum):  
+    RED = 1  
+    GREEN = 2  
+    BLUE = 3  
 
-     # Color.RED -> RED
-     ```  
+  # Color.RED -> RED
+  ```  
 
 2. **Uppercase Constants**  
-   - Example:  
-     ```python
-     MY_CONSTANT = 42  
+  ```python
+  MY_CONSTANT = 42  
 
-     # MY_CONSTANT -> 42  
-     ```  
+  # MY_CONSTANT -> 42
+  ```  
 
 ## Installation  
 
