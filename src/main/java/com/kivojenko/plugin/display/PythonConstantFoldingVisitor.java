@@ -26,18 +26,28 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
         }
 
         var resolved = reference.getReference().resolve();
+        if (resolved instanceof PyFunction function && isPropertyGetter(function)) {
+            var foldedValue = getResolvedReturnExpression(function);
+            if (foldedValue != null) {
+                addFoldingDescriptor(reference, foldedValue.getText());
+            }
+        }
+
         if (!(resolved instanceof PyTargetExpression target) || !(target.getParent() instanceof PyAssignmentStatement assignment)) {
             return;
         }
 
-
         if (isPartOfEnum(assignment)) {
-            var text = shouldBeFoldedToName(assignment) ? target.getText() : assignment.getAssignedValue().getText();
+            var text = "";
+            if (shouldBeFoldedToName(assignment)) {
+                text = target.getText();
+            } else if (assignment.getAssignedValue() != null) {
+                text = assignment.getAssignedValue().getText();
+            }
             addFoldingDescriptor(reference, text);
         } else if (isUpperCase(target.getText())) {
             addConstFoldingDescriptor(reference, assignment.getAssignedValue());
         }
-
     }
 
     private boolean isPartOfImport(PyReferenceExpression reference) {
@@ -52,7 +62,7 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
 
     private boolean isEnumSubclass(PyClass clazz) {
         for (PyExpression expression : clazz.getSuperClassExpressions()) {
-            if (expression.getText().equals("Enum")) return true;
+            if (expression.getText().contains("Enum")) return true;
         }
 
         for (var parent : clazz.getSuperClasses(null)) {
@@ -75,6 +85,49 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
         return false;
     }
 
+    private boolean isPropertyGetter(PyFunction function) {
+        if (function.getDecoratorList() == null) return false;
+        for (PyDecorator decorator : function.getDecoratorList().getDecorators()) {
+            if (decorator.getName() != null && decorator.getName().contains("property")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private PyExpression getResolvedReturnExpression(PyFunction function) {
+        var statements = function.getStatementList().getStatements();
+        if (statements.length == 1 && statements[0] instanceof PyReturnStatement returnStmt) {
+            var expr = returnStmt.getExpression();
+            if (expr instanceof PyReferenceExpression refExpr) {
+                var resolved = refExpr.getReference().resolve();
+
+                if (resolved instanceof PyTargetExpression target &&
+                        target.getParent() instanceof PyAssignmentStatement assignment &&
+                        assignment.getAssignedValue() != null) {
+
+                    if (isPartOfEnum(assignment)) {
+                        if (shouldBeFoldedToName(assignment)) {
+                            return target;
+                        } else {
+                            return assignment.getAssignedValue();
+                        }
+                    }
+
+                    if (isUpperCase(target.getText())) {
+                        return assignment.getAssignedValue();
+                    }
+                }
+
+                if (resolved instanceof PyFunction nestedFunction && isPropertyGetter(nestedFunction)) {
+                    return getResolvedReturnExpression(nestedFunction);
+                }
+            }
+            return expr;
+        }
+        return null;
+    }
+
     private boolean isUpperCase(String text) {
         return text != null && text.equals(text.toUpperCase());
     }
@@ -84,7 +137,6 @@ public class PythonConstantFoldingVisitor extends PyRecursiveElementVisitor {
             addFoldingDescriptor(reference, valueElement.getText());
         }
     }
-
 
     private void addFoldingDescriptor(PyReferenceExpression reference, String placeholder) {
         var range = reference.getTextRange();

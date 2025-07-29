@@ -6,8 +6,9 @@
         <![CDATA[
         This plugin folds
         <ul>
-            <li>enumerated constants to their names
-            <li>upper case constants to their values
+            <li>enumerated constants to their names</li>
+            <li>upper case constants to their values</li>
+            <li>static properties to their values</li>
         </ul>
         for better readability in Python.
         ]]>
@@ -15,6 +16,7 @@
     <change-notes>
         <![CDATA[
         <ul>
+            <li>1.0.5: Fold static properties</li>
             <li>1.0.4: Improve enums' support</li>
             <li>1.0.3: Fold all enumerated constants to their names</li>
             <li>1.0.2: Fold on file reopen</li>

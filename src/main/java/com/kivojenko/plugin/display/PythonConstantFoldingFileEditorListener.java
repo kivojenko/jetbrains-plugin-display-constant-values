@@ -27,7 +27,7 @@ public class PythonConstantFoldingFileEditorListener implements FileEditorManage
     }
 
     private void collapseFoldRegions(FoldingModel foldingModel) {
-        FoldRegion[] foldRegions = foldingModel.getAllFoldRegions();
+        var foldRegions = foldingModel.getAllFoldRegions();
         for (FoldRegion foldRegion : foldRegions) {
             collapseFoldRegion(foldRegion);
         }
